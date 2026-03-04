@@ -1,0 +1,34 @@
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+*.csproj
+*.sln
+*.suo
+*.user
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+.vs/
+.gradle/
+ExportedObj/
+.consulo/
+*.csproj
+*.unityproj
+
+# 대용량 에셋 폴더 (Git 제외)
+Assets/Animations/
+Assets/Models/
+Assets/Sounds/
+Assets/Textures/
+
+# meta 파일은 유지 (Unity 필수)
+!Assets/Animations/*.meta
+!Assets/Models/*.meta
+!Assets/Sounds/*.meta
+!Assets/Textures/*.meta

@@ -23,7 +23,7 @@ public class EngineAmbience : MonoBehaviour
     [SerializeField] private EmissionMaterialEntry[] emissionEntries;
     [SerializeField] private float emfadeDuration = 1.5f;
     [SerializeField] private float enginefadeDuration = 3.5f;
-
+    [SerializeField] private Transform CameraLobbySpawn;
 
     private Dictionary<Material, Color> originalColors = new Dictionary<Material, Color>();
     private Vector3 originalPos;
@@ -37,7 +37,7 @@ public class EngineAmbience : MonoBehaviour
             originalColors[entry.material] = entry.material.GetColor("_EmissionColor");
             entry.material.EnableKeyword("_EMISSION");
         }
-        originalPos = transform.localPosition;
+        originalPos = CameraLobbySpawn.localPosition;
         StartCoroutine(ShakeRoutine());
         PlayEngineStandSound();
     }
@@ -128,7 +128,7 @@ public class EngineAmbience : MonoBehaviour
     }
 
     // GameStart 버튼에서 호출
-    public void StopAll()
+    public IEnumerator StopAllSequence()
     {
         StopAllCoroutines();
         transform.localPosition = originalPos;
@@ -137,6 +137,8 @@ public class EngineAmbience : MonoBehaviour
         StartCoroutine(FadeOutShake());
         foreach (var entry in emissionEntries)
             StartCoroutine(FadeOutEmission(entry));
-        
+        float maxWaitTime = Mathf.Max(emfadeDuration, enginefadeDuration);
+        yield return new WaitForSeconds(maxWaitTime);
+
     }
 }

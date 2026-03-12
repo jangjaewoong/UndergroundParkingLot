@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("마우스 설정")]
     public float mouseSensitivity = 2.0f;
     public Transform cameraTransform;
+    public float cameraHeight = 1.7f;
 
     [Header("발소리 설정")]
     public AudioClip footstepClip;
@@ -36,6 +37,7 @@ public class PlayerMovement : MonoBehaviour
         MouseLook();
         Move();
         ApplyGravity();
+        UpdateCamera();
     }
 
     void MouseLook()
@@ -46,7 +48,7 @@ public class PlayerMovement : MonoBehaviour
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -80f, 80f);
 
-        cameraTransform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        cameraTransform.rotation = Quaternion.Euler(xRotation, transform.eulerAngles.y, 0f);
         transform.Rotate(Vector3.up * mouseX);
     }
 
@@ -84,22 +86,21 @@ public class PlayerMovement : MonoBehaviour
     void PlayFootstep()
     {
         if (footstepClip != null && audioSource != null)
-        {
             audioSource.PlayOneShot(footstepClip, 1.0f);
-        }
     }
 
     void ApplyGravity()
     {
         if (controller.isGrounded)
-        {
             velocity.y = -2f;
-        }
         else
-        {
             velocity.y += gravity * Time.deltaTime;
-        }
 
         controller.Move(velocity * Time.deltaTime);
+    }
+
+    void UpdateCamera()
+    {
+        cameraTransform.position = transform.position + Vector3.up * cameraHeight;
     }
 }

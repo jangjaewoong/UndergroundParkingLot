@@ -9,8 +9,8 @@ public class GhostAI : MonoBehaviour
     public float attackRange = 1.5f;
 
     [Header("사운드 설정")]
-    public AudioClip chaseClip;    // 쫓아올때 소리
-    public AudioClip jumpScareClip; // 갑툭튀 소리
+    public AudioClip chaseClip;
+    public AudioClip jumpScareClip;
 
     [Header("갑툭튀 설정")]
     public Camera jumpScareCamera;
@@ -95,8 +95,10 @@ public class GhostAI : MonoBehaviour
             jumpScareTimer -= Time.deltaTime;
             if (jumpScareTimer <= 0f)
             {
-                jumpScareCamera.gameObject.SetActive(false);
-                playerCamera.gameObject.SetActive(true);
+                if (jumpScareCamera != null)
+                    jumpScareCamera.gameObject.SetActive(false);
+                if (playerCamera != null)
+                    playerCamera.gameObject.SetActive(true);
             }
         }
     }
@@ -110,28 +112,50 @@ public class GhostAI : MonoBehaviour
         {
             animator.SetInteger("State", 1);
             lookTimer = lookDuration;
-            audioSource.volume = 0.1f;
-            audioSource.loop = true;
-            audioSource.clip = chaseClip;
-            audioSource.Play();
+            if (audioSource != null)
+            {
+                audioSource.volume = 0.1f;
+                audioSource.loop = true;
+                audioSource.clip = chaseClip;
+                audioSource.Play();
+            }
         }
         else if (newState == GhostState.Crawling)
         {
             animator.SetInteger("State", 2);
-            audioSource.volume = 1.0f;
+            if (audioSource != null)
+                audioSource.volume = 1.0f;
         }
         else if (newState == GhostState.Attack)
         {
             animator.SetInteger("State", 3);
-            audioSource.Stop();
-
-            playerCamera.gameObject.SetActive(false);
-            jumpScareCamera.gameObject.SetActive(true);
+            if (audioSource != null)
+                audioSource.Stop();
+            if (playerCamera != null)
+                playerCamera.gameObject.SetActive(false);
+            if (jumpScareCamera != null)
+                jumpScareCamera.gameObject.SetActive(true);
             jumpScareTimer = jumpScareDuration;
-
-            if (jumpScareClip != null)
+            if (jumpScareClip != null && audioSource != null)
                 audioSource.PlayOneShot(jumpScareClip, 1.0f);
         }
+    }
+
+    public void ResetGhost()
+    {
+        playerDetected = false;
+        currentState = GhostState.Idle;
+        lookTimer = 0f;
+        jumpScareTimer = 0f;
+
+        if (audioSource != null)
+            audioSource.Stop();
+        if (animator != null)
+            animator.SetInteger("State", 0);
+        if (jumpScareCamera != null)
+            jumpScareCamera.gameObject.SetActive(false);
+        if (playerCamera != null)
+            playerCamera.gameObject.SetActive(true);
     }
 
     void OnDrawGizmosSelected()

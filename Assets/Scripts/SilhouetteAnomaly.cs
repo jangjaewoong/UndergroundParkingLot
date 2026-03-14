@@ -177,7 +177,7 @@ public class SilhouetteAnomaly : MonoBehaviour
     void PlayBehindSound()
     {
         if (behindSound != null && audioSource != null)
-            audioSource.PlayOneShot(behindSound, 1.0f);
+            audioSource.PlayOneShot(behindSound, 3.0f);
     }
 
     void SetState(State newState)
@@ -203,6 +203,7 @@ public class SilhouetteAnomaly : MonoBehaviour
             case State.ShowingBehind:
                 behindTriggered = false;
                 stateTimer = behindStandDuration;
+                PlayBehindSound();
                 break;
 
             case State.Idle:

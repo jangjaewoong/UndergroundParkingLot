@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
         // ── 랜덤 이상현상 선택 ──
         // anomalyIndex: 0=귀신, 1=경비, 2=실루엣, -1=없음
         // 없음 확률을 높이고 싶으면 Range 범위 늘리면 됨 (예: 0~4 → -1 확률 40%)
-        int roll = Random.Range(0, 4); // 0,1,2 = 이상현상 / 3 = 없음
+        int roll = 2; // 0,1,2 = 이상현상 / 3 = 없음
 
         if (roll == 0 && ghost != null)
         {

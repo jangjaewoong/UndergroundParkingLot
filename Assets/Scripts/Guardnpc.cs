@@ -39,6 +39,13 @@ public class GuardNPC : MonoBehaviour
     private CharacterController controller;
     private float verticalVelocity = 0f;
 
+    // State: 0=idle, 1=running, 2=attack
+    private void SetState(int state)
+    {
+        if (animator != null)
+            animator.SetInteger("State", state);
+    }
+
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -53,6 +60,8 @@ public class GuardNPC : MonoBehaviour
             baton.SetActive(false);
         if (jumpScareCamera != null)
             jumpScareCamera.gameObject.SetActive(false);
+
+        SetState(0);
     }
 
     void Update()
@@ -67,6 +76,7 @@ public class GuardNPC : MonoBehaviour
                 if (playerCamera != null)
                     playerCamera.gameObject.SetActive(true);
                 isAttacking = false;
+                SetState(0);
             }
             return;
         }
@@ -154,13 +164,15 @@ public class GuardNPC : MonoBehaviour
                 dialogueText.gameObject.SetActive(true);
             }
         }
-        animator.SetBool("IsTalking", true);
+        if (animator != null)
+            animator.SetBool("IsTalking", true);
     }
 
     void StopTalking()
     {
         isTalking = false;
-        animator.SetBool("IsTalking", false);
+        if (animator != null)
+            animator.SetBool("IsTalking", false);
         if (dialogueText != null)
             dialogueText.gameObject.SetActive(false);
     }
@@ -168,7 +180,7 @@ public class GuardNPC : MonoBehaviour
     void StartChasing()
     {
         isChasing = true;
-        animator.SetBool("IsChasing", true);
+        SetState(1);
         if (baton != null)
             baton.SetActive(true);
         if (interactText != null)
@@ -179,8 +191,7 @@ public class GuardNPC : MonoBehaviour
     {
         isAttacking = true;
         isChasing = false;
-        animator.SetBool("IsChasing", false);
-        animator.SetBool("IsAttacking", true);
+        SetState(2);
         jumpScareTimer = jumpScareDuration;
 
         if (playerCamera != null)
@@ -188,7 +199,7 @@ public class GuardNPC : MonoBehaviour
         if (jumpScareCamera != null)
             jumpScareCamera.gameObject.SetActive(true);
 
-        if (jumpScareClip != null)
+        if (jumpScareClip != null && audioSource != null)
             audioSource.PlayOneShot(jumpScareClip, 1.0f);
     }
 
@@ -204,8 +215,7 @@ public class GuardNPC : MonoBehaviour
         if (animator != null)
         {
             animator.SetBool("IsTalking", false);
-            animator.SetBool("IsChasing", false);
-            animator.SetBool("IsAttacking", false);
+            SetState(0);
         }
         if (baton != null)
             baton.SetActive(false);

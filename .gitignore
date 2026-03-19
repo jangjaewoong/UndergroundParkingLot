@@ -28,7 +28,6 @@ Assets/Sounds/
 Assets/Textures/
 Assets/Download/
 Assets/Images/
-Assets/Fonts/
 
 # meta 파일은 유지 (Unity 필수)
 !Assets/Animations/*.meta
@@ -37,4 +36,6 @@ Assets/Fonts/
 !Assets/Textures/*.meta
 !Assets/Download/*.meta
 !Assets/Images/*.meta
-!Assets/Fonts/*.meta
+
+Assets/_Recovery/
+Assets/_Recovery.meta

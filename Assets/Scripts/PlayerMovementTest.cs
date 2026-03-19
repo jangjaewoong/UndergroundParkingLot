@@ -53,15 +53,11 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        Vector2 look = _lookAction.ReadValue<Vector2>();
-
-        transform.Rotate(Vector3.up * look.x * mouseSensitivity);
-
-        _verticalRotation -= look.y * mouseSensitivity;
-        _verticalRotation = Mathf.Clamp(_verticalRotation, -verticalClamp, verticalClamp);
-
         if (cameraTransform != null)
-            cameraTransform.localRotation = Quaternion.Euler(_verticalRotation, 0f, 0f);
+        {
+            Vector3 camEuler = cameraTransform.eulerAngles;
+            transform.rotation = Quaternion.Euler(0f, camEuler.y, 0f);
+        }
     }
 
     void FixedUpdate()

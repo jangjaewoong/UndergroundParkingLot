@@ -36,3 +36,6 @@ Assets/Images/
 !Assets/Textures/*.meta
 !Assets/Download/*.meta
 !Assets/Images/*.meta
+
+Assets/_Recovery/
+Assets/_Recovery.meta

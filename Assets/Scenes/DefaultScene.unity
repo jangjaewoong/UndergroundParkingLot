@@ -621,8 +621,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8fb1b82f2383cf54e95c7bb8a47f7a69, type: 2}
-  m_sharedMaterial: {fileID: -381815609214729545, guid: 8fb1b82f2383cf54e95c7bb8a47f7a69, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -902,9 +902,11 @@ MonoBehaviour:
   smoothTime: 0.1
   mouseSensitivity: 2
   maxLookAngle: 80
-  cameraTransform: {fileID: 0}
+  cameraTransform: {fileID: 1486762368}
   footstepClip: {fileID: 8300000, guid: e2089ba7273abd147abc957c293a3362, type: 3}
-  runFootstepClip: {fileID: 0}
+  walkBobAmount: 0.1
+  runBobAmount: 0.07
+  bobReturnSpeed: 8
 --- !u!4 &878179199 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 54b4fa9efe0929c47b2c6f7776fad445, type: 3}
@@ -923,7 +925,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.561
   m_Pitch: 1
   Loop: 0
   Mute: 0

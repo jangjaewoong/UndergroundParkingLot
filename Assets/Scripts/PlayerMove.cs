@@ -14,7 +14,11 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("발소리 설정")]
     public AudioClip footstepClip;
-    public AudioClip runFootstepClip;
+
+    [Header("Head Bob 설정")]
+    public float walkBobAmount = 0.04f;   // 걸을 때 bob 크기
+    public float runBobAmount = 0.07f;    // 뛸 때 bob 크기
+    public float bobReturnSpeed = 8f;     // 원래 위치로 돌아오는 속도
 
     private CharacterController characterController;
     private Animator animator;
@@ -23,7 +27,12 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 moveVelocitySmooth;
     private float verticalVelocity = 0f;
     private float xRotation = 0f;
-    private float footstepCooldown = 0f;
+
+    // Head Bob
+    private Vector3 cameraOriginPos;
+    private float bobTargetY = 0f;
+    private float bobTargetX = 0f;
+    private bool bobGoingDown = false;
 
     void Start()
     {
@@ -36,15 +45,15 @@ public class PlayerMovement : MonoBehaviour
 
         if (cameraTransform == null)
             cameraTransform = Camera.main.transform;
+
+        cameraOriginPos = cameraTransform.localPosition;
     }
 
     void Update()
     {
         HandleMouseLook();
         HandleMovement();
-
-        if (footstepCooldown > 0f)
-            footstepCooldown -= Time.deltaTime;
+        HandleHeadBob();
     }
 
     void HandleMouseLook()
@@ -83,18 +92,52 @@ public class PlayerMovement : MonoBehaviour
             animator.SetFloat("Speed", horizontalSpeed);
     }
 
-    void PlayFootstep()
+    void HandleHeadBob()
     {
-        if (audioSource == null) return;
-        if (footstepCooldown > 0f) return;
+        float currentY = cameraTransform.localPosition.y;
+        float currentX = cameraTransform.localPosition.x;
+
+        float targetY = cameraOriginPos.y + bobTargetY;
+        float targetX = cameraOriginPos.x + bobTargetX;
+
+        float newY = Mathf.Lerp(currentY, targetY, Time.deltaTime * bobReturnSpeed);
+        float newX = Mathf.Lerp(currentX, targetX, Time.deltaTime * bobReturnSpeed);
+
+        cameraTransform.localPosition = new Vector3(newX, newY, cameraOriginPos.z);
+
+        // 내려갔다가 다시 올라오는 처리
+        if (bobGoingDown && Mathf.Abs(currentY - targetY) < 0.005f)
+        {
+            bobGoingDown = false;
+            bobTargetY = 0f;
+            bobTargetX = 0f;
+        }
+
+        // 움직임 멈추면 원래 위치로
+        float horizontalSpeed = new Vector3(currentVelocity.x, 0f, currentVelocity.z).magnitude;
+        if (horizontalSpeed < 0.1f)
+        {
+            bobTargetY = 0f;
+            bobTargetX = 0f;
+        }
+    }
+
+    // Animation Event 에서 호출
+    public void PlayFootstep()
+    {
+        if (footstepClip != null && audioSource != null)
+            audioSource.PlayOneShot(footstepClip, 1.0f);
+
+        if (!characterController.isGrounded) return;
 
         bool isSprinting = Input.GetKey(KeyCode.LeftShift);
-        AudioClip clip = (isSprinting && runFootstepClip != null) ? runFootstepClip : footstepClip;
+        float amount = isSprinting ? runBobAmount : walkBobAmount;
 
-        if (clip != null)
-        {
-            audioSource.PlayOneShot(clip, 1.0f);
-            footstepCooldown = 0.3f;
-        }
+        // Y축 - 발 디딜 때 살짝 내려감
+        bobTargetY = -amount;
+        bobGoingDown = true;
+
+        // X축 - 발 디딜 때마다 좌우 번갈아가며 흔들림
+        bobTargetX = bobTargetX > 0 ? -amount * 0.5f : amount * 0.5f;
     }
 }

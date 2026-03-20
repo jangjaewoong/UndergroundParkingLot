@@ -15,10 +15,11 @@ public class GameManager : MonoBehaviour
     private bool roundOver = false;
 
     // 원래 위치
-    private Vector3 playerStartPos   = new Vector3(13.37f, 0.937f, 2.084f);
-    private Vector3 guardStartPos    = new Vector3(1.25f,  1.01f,  1.48f);
-    private Quaternion guardStartRot = Quaternion.Euler(0, 82.149f, 0);
-    private Vector3 ghostStartPos    = new Vector3(-2.17f, 0.76f, -9.26f);
+    private Vector3 playerStartPos   = new Vector3(22.49f, -11f, -94.374f);
+    private Vector3 guardStartPos    = new Vector3(68.7533f, -10.970f, -80.558f);
+    private Quaternion guardStartRot = Quaternion.Euler(0, 186.662f, 0);
+    private Vector3 ghostStartPos    = new Vector3(52.831f, -11.109f, -61.106f);
+    private Quaternion ghostStartRot = Quaternion.Euler(0, 180f, 0);
 
     void Start()
     {
@@ -55,6 +56,7 @@ public class GameManager : MonoBehaviour
         {
             ghost.SetActive(false);
             ghost.transform.position = ghostStartPos;
+            ghost.transform.rotation = ghostStartRot;
             GhostAI ghostAI = ghost.GetComponent<GhostAI>();
             if (ghostAI != null) ghostAI.ResetGhost();
         }
@@ -66,7 +68,7 @@ public class GameManager : MonoBehaviour
         // ── 랜덤 이상현상 선택 ──
         // anomalyIndex: 0=귀신, 1=경비, 2=실루엣, -1=없음
         // 없음 확률을 높이고 싶으면 Range 범위 늘리면 됨 (예: 0~4 → -1 확률 40%)
-        int roll = Random.Range(0,4); // 0,1,2 = 이상현상 / 3 = 없음
+        int roll = Random.Range(0, 4); // 0,1,2 = 이상현상 / 3 = 없음
 
         if (roll == 0 && ghost != null)
         {

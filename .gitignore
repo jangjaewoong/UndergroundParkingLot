@@ -26,9 +26,16 @@ Assets/Animations/
 Assets/Models/
 Assets/Sounds/
 Assets/Textures/
+Assets/Download/
+Assets/Images/
 
 # meta 파일은 유지 (Unity 필수)
 !Assets/Animations/*.meta
 !Assets/Models/*.meta
 !Assets/Sounds/*.meta
 !Assets/Textures/*.meta
+!Assets/Download/*.meta
+!Assets/Images/*.meta
+
+Assets/_Recovery/
+Assets/_Recovery.meta

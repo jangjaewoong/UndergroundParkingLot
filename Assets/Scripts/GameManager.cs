@@ -5,7 +5,8 @@ public class GameManager : MonoBehaviour
     [Header("이상현상 오브젝트")]
     public GameObject ghost;
     public GuardNPC guard;
-    public SilhouetteAnomaly silhouette; // ★ 새로 추가
+    public SilhouetteAnomaly silhouette;
+    public BabyLaughAnomaly babyLaugh; // ★ 새로 추가
 
     [Header("플레이어")]
     public GameObject player;
@@ -65,10 +66,13 @@ public class GameManager : MonoBehaviour
         if (silhouette != null)
             silhouette.ResetAnomaly();
 
+        // ── 애기 웃음소리 리셋 ──
+        if (babyLaugh != null)
+            babyLaugh.ResetAnomaly();
+
         // ── 랜덤 이상현상 선택 ──
-        // anomalyIndex: 0=귀신, 1=경비, 2=실루엣, -1=없음
-        // 없음 확률을 높이고 싶으면 Range 범위 늘리면 됨 (예: 0~4 → -1 확률 40%)
-        int roll = Random.Range(0, 4); // 0,1,2 = 이상현상 / 3 = 없음
+        // 0=귀신, 1=경비, 2=실루엣, 3=애기웃음, 4=없음
+        int roll = 3;
 
         if (roll == 0 && ghost != null)
         {
@@ -87,6 +91,12 @@ public class GameManager : MonoBehaviour
             anomalyIndex = 2;
             silhouette.Activate();
             Debug.Log("[GameManager] 이상현상: 실루엣");
+        }
+        else if (roll == 3 && babyLaugh != null)
+        {
+            anomalyIndex = 3;
+            babyLaugh.Activate();
+            Debug.Log("[GameManager] 이상현상: 애기 웃음소리");
         }
         else
         {

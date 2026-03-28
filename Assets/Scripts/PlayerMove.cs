@@ -7,18 +7,14 @@ public class PlayerMovement : MonoBehaviour
     public float runSpeed = 10f;
     public float smoothTime = 0.1f;
 
-    [Header("카메라 설정")]
-    public float mouseSensitivity = 2f;
-    public float maxLookAngle = 80f;
-    public Transform cameraTransform;
-
     [Header("발소리 설정")]
     public AudioClip footstepClip;
 
     [Header("Head Bob 설정")]
-    public float walkBobAmount = 0.04f;   // 걸을 때 bob 크기
-    public float runBobAmount = 0.07f;    // 뛸 때 bob 크기
-    public float bobReturnSpeed = 8f;     // 원래 위치로 돌아오는 속도
+    public float walkBobAmount = 0.04f;
+    public float runBobAmount = 0.07f;
+    public float bobReturnSpeed = 8f;
+    public Transform headTransform; // Head 오브젝트 연결
 
     private CharacterController characterController;
     private Animator animator;
@@ -26,10 +22,9 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 currentVelocity;
     private Vector3 moveVelocitySmooth;
     private float verticalVelocity = 0f;
-    private float xRotation = 0f;
 
     // Head Bob
-    private Vector3 cameraOriginPos;
+    private Vector3 headOriginPos;
     private float bobTargetY = 0f;
     private float bobTargetX = 0f;
     private bool bobGoingDown = false;
@@ -43,29 +38,14 @@ public class PlayerMovement : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        if (cameraTransform == null)
-            cameraTransform = Camera.main.transform;
-
-        cameraOriginPos = cameraTransform.localPosition;
+        if (headTransform != null)
+            headOriginPos = headTransform.localPosition;
     }
 
     void Update()
     {
-        HandleMouseLook();
         HandleMovement();
         HandleHeadBob();
-    }
-
-    void HandleMouseLook()
-    {
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
-
-        xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -maxLookAngle, maxLookAngle);
-        cameraTransform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-
-        transform.Rotate(Vector3.up * mouseX);
     }
 
     void HandleMovement()
@@ -76,9 +56,15 @@ public class PlayerMovement : MonoBehaviour
         bool isSprinting = Input.GetKey(KeyCode.LeftShift);
         float targetSpeed = isSprinting ? runSpeed : walkSpeed;
 
-        Vector3 targetMove = (transform.right * moveX + transform.forward * moveZ).normalized * targetSpeed;
+        // 카메라 방향 기준으로 이동 (Y축 무시)
+        Camera cam = Camera.main;
+        Vector3 camForward = new Vector3(cam.transform.forward.x, 0f, cam.transform.forward.z).normalized;
+        Vector3 camRight = new Vector3(cam.transform.right.x, 0f, cam.transform.right.z).normalized;
+
+        Vector3 targetMove = (camRight * moveX + camForward * moveZ).normalized * targetSpeed;
         currentVelocity = Vector3.SmoothDamp(currentVelocity, targetMove, ref moveVelocitySmooth, smoothTime);
 
+        // 중력
         if (characterController.isGrounded)
             verticalVelocity = -1f;
         else
@@ -87,6 +73,14 @@ public class PlayerMovement : MonoBehaviour
         currentVelocity.y = verticalVelocity;
         characterController.Move(currentVelocity * Time.deltaTime);
 
+        // 이동 방향으로 플레이어 회전 (좌우만)
+        if (new Vector3(currentVelocity.x, 0f, currentVelocity.z).magnitude > 0.1f)
+        {
+            Vector3 lookDir = new Vector3(currentVelocity.x, 0f, currentVelocity.z);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDir), Time.deltaTime * 10f);
+        }
+
+        // 애니메이터
         float horizontalSpeed = new Vector3(currentVelocity.x, 0f, currentVelocity.z).magnitude;
         if (animator != null)
             animator.SetFloat("Speed", horizontalSpeed);
@@ -94,18 +88,19 @@ public class PlayerMovement : MonoBehaviour
 
     void HandleHeadBob()
     {
-        float currentY = cameraTransform.localPosition.y;
-        float currentX = cameraTransform.localPosition.x;
+        if (headTransform == null) return;
 
-        float targetY = cameraOriginPos.y + bobTargetY;
-        float targetX = cameraOriginPos.x + bobTargetX;
+        float currentY = headTransform.localPosition.y;
+        float currentX = headTransform.localPosition.x;
+
+        float targetY = headOriginPos.y + bobTargetY;
+        float targetX = headOriginPos.x + bobTargetX;
 
         float newY = Mathf.Lerp(currentY, targetY, Time.deltaTime * bobReturnSpeed);
         float newX = Mathf.Lerp(currentX, targetX, Time.deltaTime * bobReturnSpeed);
 
-        cameraTransform.localPosition = new Vector3(newX, newY, cameraOriginPos.z);
+        headTransform.localPosition = new Vector3(newX, newY, headOriginPos.z);
 
-        // 내려갔다가 다시 올라오는 처리
         if (bobGoingDown && Mathf.Abs(currentY - targetY) < 0.005f)
         {
             bobGoingDown = false;
@@ -113,7 +108,6 @@ public class PlayerMovement : MonoBehaviour
             bobTargetX = 0f;
         }
 
-        // 움직임 멈추면 원래 위치로
         float horizontalSpeed = new Vector3(currentVelocity.x, 0f, currentVelocity.z).magnitude;
         if (horizontalSpeed < 0.1f)
         {
@@ -133,11 +127,8 @@ public class PlayerMovement : MonoBehaviour
         bool isSprinting = Input.GetKey(KeyCode.LeftShift);
         float amount = isSprinting ? runBobAmount : walkBobAmount;
 
-        // Y축 - 발 디딜 때 살짝 내려감
         bobTargetY = -amount;
         bobGoingDown = true;
-
-        // X축 - 발 디딜 때마다 좌우 번갈아가며 흔들림
         bobTargetX = bobTargetX > 0 ? -amount * 0.5f : amount * 0.5f;
     }
 }

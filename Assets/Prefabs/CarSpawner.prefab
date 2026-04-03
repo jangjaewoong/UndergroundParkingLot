@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &9172030612050276650
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3421920724626285901}
+  - component: {fileID: 7734473932119943662}
+  m_Layer: 0
+  m_Name: CarSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3421920724626285901
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9172030612050276650}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7734473932119943662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9172030612050276650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1745787a46dea34fa04cc1edaa582f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarSpawner
+  carPrefabs:
+  - {fileID: 4737180461791467819, guid: 69c428fc8c99dd64f939029aedbdbbd4, type: 3}
+  - {fileID: 8467328246971626030, guid: 9cd21b518fb32f543918185b3ec0565a, type: 3}
+  - {fileID: 7608681134308618655, guid: 09b91a692f365e9448ccd173d60b369e, type: 3}
+  - {fileID: 5416709355124056277, guid: 56b0b192f8d102447922cc2926a2e4c7, type: 3}
+  - {fileID: 3379513717344628926, guid: 1d9dc7ff8dfc27849b332c67c072dc0f, type: 3}
+  - {fileID: 7342631427124950139, guid: 678402b1caaf58248ac4deb90df1df57, type: 3}
+  - {fileID: 175816626113072666, guid: d44bdad5a5d365940b10881e954321f6, type: 3}
+  - {fileID: 8153527417380962627, guid: b660705db0b424d418bc99d219989292, type: 3}
+  - {fileID: 928263490975441203, guid: 903cb05a83214f04c90dac3e0f49ce9a, type: 3}
+  - {fileID: 8034019507586838038, guid: 9f41b67b41c5b144487a4972e510fb13, type: 3}
+  minCars: 30
+  maxCars: 60
+  spawnPointParent: {fileID: 0}

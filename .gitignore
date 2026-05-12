@@ -26,8 +26,6 @@ Assets/Animations/
 Assets/Models/
 Assets/Sounds/
 Assets/Textures/
-Assets/Download/
-Assets/Images/
 Assets/Practicing/
 Assets/Scenes/NewMap/
 Assets/Fonts/
@@ -37,8 +35,6 @@ Assets/Fonts/
 !Assets/Models/*.meta
 !Assets/Sounds/*.meta
 !Assets/Textures/*.meta
-!Assets/Download/*.meta
-!Assets/Images/*.meta
 !Assets/Practicing/*.meta
 !Assets/Scenes/NewMap/*.meta
 !Assets/Fonts/*.meta

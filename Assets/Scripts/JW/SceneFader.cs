@@ -53,21 +53,16 @@ public class SceneFader : MonoBehaviour
         fadeCanvasGroup.alpha = endAlpha;
     }
 
-    private void OnEnable()
+    // ⭐ 추가: 즉시 검은색 강제
+    public void SetBlackInstant()
     {
-        // 씬 로드가 완료되었을 때 실행될 함수 등록
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        fadeCanvasGroup.alpha = 1f;
+        fadeCanvasGroup.blocksRaycasts = true;
     }
 
-    private void OnDisable()
-    {
-        // 오브젝트 파괴 시 등록 해제 (메모리 누수 방지)
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
+    // ⭐ 추가: 현재 alpha 확인용 (디버그)
+    public float CurrentAlpha => fadeCanvasGroup.alpha;
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        // 새로운 씬이 로드되면 1초 동안 화면을 밝힙니다.
-        StartCoroutine(FadeIn(fadeinTime));
-    }
 }
+
+

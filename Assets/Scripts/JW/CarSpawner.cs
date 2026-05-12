@@ -69,18 +69,32 @@ public class CarSpawner : MonoBehaviour
         return newCar;
     }
 
-    void Start()
-    {
-        RespawnCars();
-    }
+
 
     /// <summary>
     /// 외부에서 호출: 기존 차량 전부 회수 후 랜덤 재배치
     /// </summary>
-    public void RespawnCars()
+    /// <summary>
+    /// 외부에서 호출: 차량 스폰 여부에 따라 처리
+    /// </summary>
+    public void RespawnCars(bool shouldSpawn)
     {
         ReturnAllCars();
-        SpawnCars();
+
+        if (shouldSpawn)
+        {
+            SpawnCars();
+        }
+        else
+        {
+            Debug.Log("CarSpawner: 이상현상이 차량 스폰을 비활성화 — 빈 주차장 유지");
+        }
+    }
+
+    // 기존 파라미터 없는 버전은 오버로드로 유지 (기본 true)
+    public void RespawnCars()
+    {
+        RespawnCars(true);
     }
 
     void ReturnAllCars()

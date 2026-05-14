@@ -18,26 +18,23 @@
 .gradle/
 ExportedObj/
 .consulo/
-*.csproj
 *.unityproj
 
-# 대용량 에셋 폴더 (Git 제외)
-Assets/Animations/
-Assets/Models/
-Assets/Sounds/
-Assets/Textures/
-Assets/Practicing/
-Assets/Scenes/NewMap/
-Assets/Fonts/
+# ===== 대용량 에셋: 완전 제외 (meta 포함) =====
+Assets/_Art/5_Models/
+Assets/_Art/5_Models.meta
+Assets/_Art/6_Textures/
+Assets/_Art/6_Textures.meta
 
-# meta 파일은 유지 (Unity 필수)
-!Assets/Animations/*.meta
-!Assets/Models/*.meta
-!Assets/Sounds/*.meta
-!Assets/Textures/*.meta
-!Assets/Practicing/*.meta
-!Assets/Scenes/NewMap/*.meta
-!Assets/Fonts/*.meta
+# ===== 내용만 제외, meta는 유지 (Unity 폴더 구조 보존) =====
+Assets/_Audio/**/*
+!Assets/_Audio/**/
+!Assets/_Audio/**/*.meta
 
+Assets/_Fonts/**/*
+!Assets/_Fonts/**/
+!Assets/_Fonts/**/*.meta
+
+# ===== 기타 제외 항목 =====
 Assets/_Recovery/
 Assets/_Recovery.meta

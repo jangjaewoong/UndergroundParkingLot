@@ -6,16 +6,13 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/_Cinematic/Scenes/OpeningCinematic.unity
-    guid: d2516a2e6a53976448ce9d287669d3a5
-  - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/_Project/1. Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Scenes/Lobby.unity
+    path: Assets/_Project/1. Scenes/Lobby.unity
     guid: b0d3ec24b303d2b4cae898e477b99d9f
   - enabled: 1
-    path: Assets/Scenes/DefaultScene.unity
+    path: Assets/_Project/1. Scenes/DefaultScene.unity
     guid: 3e3cf3a9d45ade248ae16bb2c5ea2218
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: dd50a5683ffe2b3468e7a98981e41896, type: 2}
